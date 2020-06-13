@@ -34,10 +34,10 @@ $routes = getArray($routeRows, "ROUTING_TABLE");
 $result = "";
 $directConnectionIndex = array_search($_SERVER['REMOTE_ADDR'], array_column($clients, "Virtual Address"));
 $routeConnectionIndex = array_search($_SERVER['REMOTE_ADDR'] . "C", array_column($routes, "Virtual Address"));
-if ($directConnectionIndex != false){
+if (is_int($directConnectionIndex)){
     $result = json_encode($clients[$directConnectionIndex], JSON_PRETTY_PRINT);
 }
-else if ($routeConnectionIndex != false){
+else if (is_int($routeConnectionIndex)){
     $commonName = $routes[$routeConnectionIndex]["Common Name"];
     $gatewayConnectionIndex = array_search($commonName, array_column($clients, "Common Name"));
     $result = json_encode($clients[$gatewayConnectionIndex], JSON_PRETTY_PRINT);
