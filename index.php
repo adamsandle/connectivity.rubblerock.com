@@ -35,13 +35,16 @@ $result = "";
 $directConnectionIndex = array_search($_SERVER['REMOTE_ADDR'], array_column($clients, "Virtual Address"));
 $routeConnectionIndex = array_search($_SERVER['REMOTE_ADDR'] . "C", array_column($routes, "Virtual Address"));
 if (is_int($directConnectionIndex)){
-    $result = json_encode($clients[$directConnectionIndex], JSON_PRETTY_PRINT);
+    $result = $clients[$directConnectionIndex];
 }
 else if (is_int($routeConnectionIndex)){
     $commonName = $routes[$routeConnectionIndex]["Common Name"];
     $gatewayConnectionIndex = array_search($commonName, array_column($clients, "Common Name"));
-    $result = json_encode($clients[$gatewayConnectionIndex], JSON_PRETTY_PRINT);
+    $result = $clients[$gatewayConnectionIndex];
 }
 
-echo $result;
+$result["Client IP"] = $_SERVER['REMOTE_ADDR'];
+$result["Client Hostname"] = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+
+echo json_encode($result, JSON_PRETTY_PRINT);
 ?>
